@@ -211,21 +211,6 @@ export const SERVICES_LIST: ServiceItem[] = [
       'Directional Crystals & Yantras'
     ],
     idealFor: 'Existing Homes, Rented Properties, Built-up Commercial Spaces'
-  },
-  {
-    id: 'astro-vastu',
-    title: 'Astro-Vastu Consultation',
-    shortDesc: 'Synchronizing personal horoscope (Kundali) planetary positions with individual home directional zones.',
-    fullDesc: 'Astro-Vastu connects an individual\'s birth chart with their living/working environment. By mapping personal planetary dasha (Sun, Moon, Jupiter, Saturn, Rahu) to corresponding house directions, we unlock personalized growth.',
-    category: 'Specialized',
-    iconName: 'Sparkles',
-    features: [
-      'Personal Horoscope & Planet Direction Mapping',
-      'Customized Zone Activation for Career/Health',
-      'Identification of Personal Lucky Directions',
-      'Targeted Remedial Recommendations'
-    ],
-    idealFor: 'Individuals Seeking Deep Personal Alignment & Specific Career/Health Remedies'
   }
 ];
 
@@ -394,8 +379,8 @@ export const NON_DEMOLITION_REMEDIES = [
     icon: 'Sun'
   },
   {
-    title: 'Astro-Vastu Gem & Metal Placement',
-    desc: 'Specific planetary metal objects placed in designated Kundali directional zones for immediate financial and health relief.',
+    title: 'Directional Metal & Energy Placement',
+    desc: 'Specific elemental metal objects placed in designated directional zones for immediate financial and health relief.',
     icon: 'Compass'
   }
 ];
@@ -404,7 +389,7 @@ export const FAQ_LIST: FAQItem[] = [
   {
     category: 'General Vastu',
     question: 'Can Vastu defects really be corrected without demolition?',
-    answer: 'Yes! Over 98% of Vastu imbalances in existing homes, apartments, and offices can be corrected using non-destructive remedies such as elemental metal strips (copper, brass, lead, steel), Vastu pyramids, color balancing, directional helices, and Astro-Vastu adjustments without breaking walls or tiles.'
+    answer: 'Yes! Over 98% of Vastu imbalances in existing homes, apartments, and offices can be corrected using non-destructive remedies such as elemental metal strips (copper, brass, lead, steel), Vastu pyramids, color balancing, and directional helices without breaking walls or tiles.'
   },
   {
     category: 'Process & Services',

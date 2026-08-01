@@ -1,18 +1,39 @@
 import React, { useState } from 'react';
 import { COMPANY_INFO, SERVICES_LIST } from '../data/companyData';
 import { ConsultationBooking } from '../types';
-import { X, Calendar, MessageSquare, Mail, Phone, CheckCircle2, Send, Clock, Building } from 'lucide-react';
+import {
+  saveAppointmentToSupabase,
+  SUPABASE_PROJECT_ID,
+  SUPABASE_SQL_SETUP_SCRIPT,
+} from '../lib/supabase';
+import {
+  X,
+  Calendar,
+  MessageSquare,
+  Mail,
+  Phone,
+  CheckCircle2,
+  Send,
+  Building,
+  Database,
+  Loader2,
+  AlertCircle,
+  Copy,
+  Check,
+} from 'lucide-react';
 
 interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   defaultServiceTitle?: string;
+  onOpenAdmin?: () => void;
 }
 
 export const BookingModal: React.FC<BookingModalProps> = ({
   isOpen,
   onClose,
   defaultServiceTitle,
+  onOpenAdmin,
 }) => {
   const [formData, setFormData] = useState<ConsultationBooking>({
     name: '',
@@ -24,12 +45,35 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     notes: '',
   });
 
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [supabaseSaved, setSupabaseSaved] = useState(false);
+  const [supabaseError, setSupabaseError] = useState<string | null>(null);
+  const [showSql, setShowSql] = useState(false);
+  const [copiedSql, setCopiedSql] = useState(false);
 
   if (!isOpen) return null;
 
-  const generateWhatsAppMessage = () => {
-    const text = `*New Vastu Consultation Request*
+  const handleSaveAndSubmit = async (method: 'supabase_only' | 'whatsapp' | 'email') => {
+    setSubmitting(true);
+    setSupabaseError(null);
+
+    // 1. Save to Supabase backend table
+    const result = await saveAppointmentToSupabase(formData);
+
+    if (result.success) {
+      setSupabaseSaved(true);
+    } else {
+      console.warn('Supabase save warning:', result.error);
+      setSupabaseError(result.error || 'Saved locally; backend table may need initial creation.');
+    }
+
+    setSubmitting(false);
+    setSubmitted(true);
+
+    // 2. Dispatch externally if WhatsApp or Email requested
+    if (method === 'whatsapp') {
+      const text = `*New Vastu Consultation Request*
 ----------------------------------
 *Name:* ${formData.name || 'Not provided'}
 *Phone:* ${formData.phone || 'Not provided'}
@@ -39,25 +83,22 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 *Consultation Mode:* ${formData.consultationType} Mode
 *Notes:* ${formData.notes || 'Looking for expert Vastu guidance.'}
 ----------------------------------
-Inquiry sent via UJJWAL JAIN Vastu Website.`;
-
-    return encodeURIComponent(text);
+Inquiry saved to Supabase (Project ID: ${SUPABASE_PROJECT_ID})`;
+      const url = `https://wa.me/${COMPANY_INFO.contact.whatsapp}?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    } else if (method === 'email') {
+      const subject = encodeURIComponent(`Vastu Consultation Inquiry - ${formData.name || 'Client'}`);
+      const body = encodeURIComponent(
+        `Dear Er. Ujjwal Jain,\n\nI would like to inquire about Vastu consultation services.\n\nName: ${formData.name}\nPhone: ${formData.phone}\nCity: ${formData.city}\nService: ${formData.propertyType}\nMode: ${formData.consultationType}\nNotes: ${formData.notes}\n\n[Record saved to Supabase backend ID: ${SUPABASE_PROJECT_ID}]\n\nThank you.`
+      );
+      window.open(`mailto:${COMPANY_INFO.contact.email}?subject=${subject}&body=${body}`, '_blank');
+    }
   };
 
-  const handleWhatsAppSend = (e: React.FormEvent) => {
-    e.preventDefault();
-    const url = `https://wa.me/${COMPANY_INFO.contact.whatsapp}?text=${generateWhatsAppMessage()}`;
-    window.open(url, '_blank');
-    setSubmitted(true);
-  };
-
-  const handleEmailSend = () => {
-    const subject = encodeURIComponent(`Vastu Consultation Inquiry - ${formData.name || 'Client'}`);
-    const body = encodeURIComponent(
-      `Dear Er. Ujjwal Jain,\n\nI would like to inquire about Vastu consultation services.\n\nName: ${formData.name}\nPhone: ${formData.phone}\nCity: ${formData.city}\nService: ${formData.propertyType}\nMode: ${formData.consultationType}\nNotes: ${formData.notes}\n\nThank you.`
-    );
-    window.open(`mailto:${COMPANY_INFO.contact.email}?subject=${subject}&body=${body}`, '_blank');
-    setSubmitted(true);
+  const copySqlToClipboard = () => {
+    navigator.clipboard.writeText(SUPABASE_SQL_SETUP_SCRIPT);
+    setCopiedSql(true);
+    setTimeout(() => setCopiedSql(false), 2000);
   };
 
   return (
@@ -70,32 +111,92 @@ Inquiry sent via UJJWAL JAIN Vastu Website.`;
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-center gap-3 mb-6 border-b border-slate-100 pb-4">
-          <div className="w-12 h-12 rounded-xl bg-amber-800 text-white flex items-center justify-center">
-            <Calendar className="w-6 h-6" />
-          </div>
-          <div>
-            <h3 className="font-serif-heading font-extrabold text-xl sm:text-2xl text-slate-900">
-              Book Vastu Consultation
-            </h3>
-            <p className="text-xs text-slate-500">
-              Directly with Senior Vastu Consultant & Civil Engineer Ujjwal Jain
-            </p>
+        {/* Modal Header */}
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-xl bg-amber-800 text-white flex items-center justify-center shrink-0">
+              <Calendar className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-serif-heading font-extrabold text-xl sm:text-2xl text-slate-900">
+                Book Vastu Consultation
+              </h3>
+              <p className="text-xs text-slate-500">
+                Directly with Senior Vastu Consultant & Civil Engineer Ujjwal Jain
+              </p>
+            </div>
           </div>
         </div>
 
+        {/* Supabase Status Banner */}
+        <div className="mb-4 bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 flex items-center justify-between text-xs text-emerald-900">
+          <div className="flex items-center gap-2">
+            <Database className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span>
+              Connected to <strong>Supabase Backend</strong> ({SUPABASE_PROJECT_ID})
+            </span>
+          </div>
+          {onOpenAdmin && (
+            <button
+              type="button"
+              onClick={onOpenAdmin}
+              className="text-[10px] font-bold uppercase tracking-wider text-emerald-800 hover:underline cursor-pointer"
+            >
+              View Records
+            </button>
+          )}
+        </div>
+
         {submitted ? (
-          <div className="py-8 text-center space-y-4">
+          <div className="py-6 text-center space-y-4">
             <div className="w-16 h-16 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto border border-emerald-300">
               <CheckCircle2 className="w-10 h-10" />
             </div>
             <h4 className="font-serif-heading font-extrabold text-2xl text-slate-900">
-              Inquiry Dispatched!
+              Inquiry Dispatched & Saved!
             </h4>
+
+            {supabaseSaved ? (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full border border-emerald-300">
+                <Database className="w-3.5 h-3.5" />
+                <span>Successfully saved to Supabase 'appointments' table</span>
+              </div>
+            ) : supabaseError ? (
+              <div className="bg-amber-50 border border-amber-200 p-3 rounded-xl text-left text-xs text-amber-900 space-y-2">
+                <div className="flex items-center gap-2 font-bold text-amber-800">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>Notice: Table setup in Supabase SQL editor recommended</span>
+                </div>
+                <p className="text-[11px] text-amber-700">
+                  If the 'appointments' table hasn't been created yet in your Supabase dashboard, run the one-click SQL script:
+                </p>
+                <button
+                  onClick={() => setShowSql(!showSql)}
+                  className="text-[11px] font-bold text-amber-900 underline cursor-pointer"
+                >
+                  {showSql ? 'Hide SQL Script' : 'Show Supabase SQL Setup Query'}
+                </button>
+
+                {showSql && (
+                  <div className="bg-slate-900 text-amber-200 p-3 rounded-lg text-[10px] font-mono relative overflow-x-auto">
+                    <button
+                      onClick={copySqlToClipboard}
+                      className="absolute top-2 right-2 p-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-[10px] flex items-center gap-1"
+                    >
+                      {copiedSql ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+                      <span>{copiedSql ? 'Copied' : 'Copy SQL'}</span>
+                    </button>
+                    <pre className="whitespace-pre-wrap">{SUPABASE_SQL_SETUP_SCRIPT}</pre>
+                  </div>
+                )}
+              </div>
+            ) : null}
+
             <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto">
-              Thank you {formData.name || 'Valued Client'}. Our team will review your details and contact you shortly.
+              Thank you <strong>{formData.name || 'Valued Client'}</strong>. Er. Ujjwal Jain and team will review your consultation request promptly.
             </p>
-            <div className="pt-4 flex justify-center">
+
+            <div className="pt-4 flex justify-center gap-3">
               <button
                 onClick={() => {
                   setSubmitted(false);
@@ -105,10 +206,28 @@ Inquiry sent via UJJWAL JAIN Vastu Website.`;
               >
                 Close Window
               </button>
+              {onOpenAdmin && (
+                <button
+                  onClick={() => {
+                    onClose();
+                    onOpenAdmin();
+                  }}
+                  className="bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs px-5 py-2.5 rounded-lg border border-amber-300 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Database className="w-3.5 h-3.5" />
+                  <span>View All Supabase Bookings</span>
+                </button>
+              )}
             </div>
           </div>
         ) : (
-          <form onSubmit={handleWhatsAppSend} className="space-y-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSaveAndSubmit('supabase_only');
+            }}
+            className="space-y-4"
+          >
             {/* Consultation Mode Selection */}
             <div className="bg-amber-50/80 p-3 rounded-xl border border-amber-200 space-y-2">
               <label className="block text-xs font-bold text-amber-900">
@@ -225,29 +344,42 @@ Inquiry sent via UJJWAL JAIN Vastu Website.`;
             <div className="pt-2 space-y-2">
               <button
                 type="submit"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-3 rounded-lg shadow transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                disabled={submitting}
+                className="w-full bg-amber-800 hover:bg-amber-900 text-white font-bold text-xs py-3 rounded-lg shadow transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
-                <MessageSquare className="w-4 h-4" />
-                <span>Send Instant WhatsApp Inquiry (+91 7000593516)</span>
+                {submitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Saving to Supabase Backend...</span>
+                  </>
+                ) : (
+                  <>
+                    <Database className="w-4 h-4 text-amber-300" />
+                    <span>Book Appointment & Save to Supabase</span>
+                  </>
+                )}
               </button>
 
-              <div className="flex gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
-                  onClick={handleEmailSend}
-                  className="w-1/2 bg-slate-900 hover:bg-slate-800 text-amber-200 font-bold text-xs py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                  disabled={submitting}
+                  onClick={() => handleSaveAndSubmit('whatsapp')}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <Mail className="w-3.5 h-3.5" />
-                  <span>Send via Email</span>
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>Save + WhatsApp</span>
                 </button>
 
-                <a
-                  href={`tel:${COMPANY_INFO.contact.phone}`}
-                  className="w-1/2 bg-amber-100 hover:bg-amber-200 text-amber-900 font-bold text-xs py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer text-center"
+                <button
+                  type="button"
+                  disabled={submitting}
+                  onClick={() => handleSaveAndSubmit('email')}
+                  className="bg-slate-900 hover:bg-slate-800 text-amber-200 font-bold text-xs py-2.5 rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                 >
-                  <Phone className="w-3.5 h-3.5" />
-                  <span>Call Directly</span>
-                </a>
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>Save + Email</span>
+                </button>
               </div>
             </div>
           </form>
@@ -256,3 +388,4 @@ Inquiry sent via UJJWAL JAIN Vastu Website.`;
     </div>
   );
 };
+

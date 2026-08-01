@@ -147,7 +147,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
               ))}
             </div>
 
-            <div className="pt-2">
+            <div className="pt-2 flex flex-col gap-2">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
@@ -165,3 +165,4 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
     </header>
   );
 };
+

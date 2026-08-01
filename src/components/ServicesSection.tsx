@@ -74,7 +74,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenBooking 
             Our Professional Vastu & Architectural Services
           </h2>
           <p className="text-slate-600 text-base leading-relaxed">
-            From plot selection and CAD floor planning to non-demolition remedies and Astro-Vastu synchronization, we offer 10 specialized services tailored for your needs.
+            From plot selection and CAD floor planning to non-demolition remedies and Pad Vinyas energy grid mapping, we offer specialized services tailored for your needs.
           </p>
         </div>
 
@@ -90,7 +90,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenBooking 
                   : 'bg-slate-100 text-slate-700 hover:bg-amber-100/80 hover:text-amber-900'
               }`}
             >
-              {cat === 'All' ? 'All Services (10)' : cat}
+              {cat === 'All' ? `All Services (${SERVICES_LIST.length})` : cat}
             </button>
           ))}
         </div>

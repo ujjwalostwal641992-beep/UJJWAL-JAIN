@@ -12,9 +12,11 @@ import { FAQSection } from './components/FAQSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { BookingModal } from './components/BookingModal';
+import { SupabaseAdminModal } from './components/SupabaseAdminModal';
 
 export default function App() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [bookingServiceTitle, setBookingServiceTitle] = useState<string | undefined>(undefined);
 
   const handleOpenBooking = (serviceTitle?: string) => {
@@ -66,14 +68,26 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer onOpenBooking={() => handleOpenBooking()} />
+      <Footer
+        onOpenBooking={() => handleOpenBooking()}
+        onOpenAdmin={() => setIsAdminOpen(true)}
+      />
 
       {/* Booking Modal */}
       <BookingModal
         isOpen={isBookingOpen}
         onClose={handleCloseBooking}
         defaultServiceTitle={bookingServiceTitle}
+        onOpenAdmin={() => setIsAdminOpen(true)}
+      />
+
+      {/* Supabase Dashboard / Admin Modal */}
+      <SupabaseAdminModal
+        isOpen={isAdminOpen}
+        onClose={() => setIsAdminOpen(false)}
+        onOpenBooking={() => handleOpenBooking()}
       />
     </div>
   );
 }
+

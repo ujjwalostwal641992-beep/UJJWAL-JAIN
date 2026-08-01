@@ -1,12 +1,13 @@
 import React from 'react';
 import { COMPANY_INFO, SERVICES_LIST } from '../data/companyData';
-import { Compass, Phone, Mail, MapPin, MessageSquare, ArrowUp, ShieldCheck } from 'lucide-react';
+import { Compass, Phone, Mail, MapPin, MessageSquare, ArrowUp, ShieldCheck, Lock } from 'lucide-react';
 
 interface FooterProps {
   onOpenBooking: () => void;
+  onOpenAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenBooking }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenAdmin }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -83,13 +84,24 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking }) => {
               <li><a href="#why-us" className="hover:text-amber-400 transition-colors">Why Choose Us</a></li>
               <li><a href="#testimonials" className="hover:text-amber-400 transition-colors">Testimonials</a></li>
               <li><a href="#contact" className="hover:text-amber-400 transition-colors">Contact Office</a></li>
+              {onOpenAdmin && (
+                <li className="pt-2 border-t border-slate-800">
+                  <button
+                    onClick={onOpenAdmin}
+                    className="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1 font-semibold cursor-pointer text-xs"
+                  >
+                    <Lock className="w-3 h-3 text-amber-400" />
+                    <span>Admin Portal Login / Setup</span>
+                  </button>
+                </li>
+              )}
             </ul>
           </div>
 
           {/* Our 10 Services List */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="font-serif-heading font-bold text-slate-100 text-sm tracking-wider uppercase border-b border-slate-800 pb-2">
-              Our 10 Vastu Services
+              Our Vastu Services
             </h4>
             <ul className="space-y-1.5 text-xs text-slate-400">
               {SERVICES_LIST.map((srv) => (
@@ -131,8 +143,20 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking }) => {
 
         {/* Bottom Bar */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <div>
-            © {new Date().getFullYear()} {COMPANY_INFO.fullBrandName}. All Rights Reserved.
+          <div className="flex items-center gap-3">
+            <span>© {new Date().getFullYear()} {COMPANY_INFO.fullBrandName}. All Rights Reserved.</span>
+            {onOpenAdmin && (
+              <>
+                <span className="text-slate-800">•</span>
+                <button
+                  onClick={onOpenAdmin}
+                  className="text-slate-400 hover:text-amber-400 underline transition-colors cursor-pointer flex items-center gap-1 text-[11px]"
+                >
+                  <Lock className="w-3 h-3 text-amber-500" />
+                  <span>Admin Panel</span>
+                </button>
+              </>
+            )}
           </div>
 
           <div className="flex items-center gap-4">

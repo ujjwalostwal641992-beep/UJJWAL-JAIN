@@ -125,7 +125,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onExploreCompass }) =
               <div className="bg-amber-950/40 border border-amber-500/30 p-4 rounded-xl flex items-center gap-3">
                 <Layers className="w-8 h-8 text-amber-400 shrink-0" />
                 <div className="text-xs text-amber-100">
-                  <span className="font-bold text-amber-300 block">Pad Vinyas & Astro-Vastu Reports</span>
+                  <span className="font-bold text-amber-300 block">Pad Vinyas & 16-Zone Grid Reports</span>
                   <span>CAD floor plans mapped with 16 Vastu Zones & 45 Vedic Deities.</span>
                 </div>
               </div>
