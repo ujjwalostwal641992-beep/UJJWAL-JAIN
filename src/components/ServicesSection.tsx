@@ -15,15 +15,11 @@ import {
   ArrowRight,
   CheckCircle2,
   X,
-  Calendar,
+  Phone,
   Layers3
 } from 'lucide-react';
 
-interface ServicesSectionProps {
-  onOpenBooking: (serviceTitle?: string) => void;
-}
-
-export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenBooking }) => {
+export const ServicesSection: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
 
@@ -142,13 +138,13 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenBooking 
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
 
-                <button
-                  onClick={() => onOpenBooking(service.title)}
+                <a
+                  href="#contact"
                   className="bg-slate-900 hover:bg-slate-800 text-amber-300 text-xs font-bold px-3.5 py-2 rounded-md shadow transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
-                  <Calendar className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Book This</span>
-                </button>
+                  <Phone className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Inquire</span>
+                </a>
               </div>
             </div>
           ))}
@@ -213,17 +209,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenBooking 
                   Close
                 </button>
 
-                <button
-                  onClick={() => {
-                    const title = selectedService.title;
-                    setSelectedService(null);
-                    onOpenBooking(title);
-                  }}
-                  className="w-full sm:w-auto bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white font-bold text-xs px-6 py-2.5 rounded-md shadow flex items-center justify-center gap-2 cursor-pointer"
+                <a
+                  href="#contact"
+                  onClick={() => setSelectedService(null)}
+                  className="w-full sm:w-auto bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white font-bold text-xs px-6 py-2.5 rounded-md shadow flex items-center justify-center gap-2 cursor-pointer text-center"
                 >
-                  <Calendar className="w-4 h-4" />
+                  <Phone className="w-4 h-4" />
                   <span>Inquire for {selectedService.title}</span>
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -232,3 +225,4 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onOpenBooking 
     </section>
   );
 };
+

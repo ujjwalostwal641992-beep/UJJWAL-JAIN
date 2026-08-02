@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
 import { VASTU_DIRECTIONS } from '../data/companyData';
 import { VastuDirectionZone } from '../types';
-import { Compass, Check, AlertTriangle, ShieldCheck, Search, Sparkles } from 'lucide-react';
+import { Compass, Check, Search } from 'lucide-react';
 
 export const VastuCompassTool: React.FC = () => {
   const [activeDirection, setActiveDirection] = useState<VastuDirectionZone>(VASTU_DIRECTIONS[1]); // Default North-East (Ishan)
   const [searchQuery, setSearchQuery] = useState('');
-
-  const filteredDirections = VASTU_DIRECTIONS.filter((dir) => {
-    if (!searchQuery) return true;
-    const query = searchQuery.toLowerCase();
-    return (
-      dir.direction.toLowerCase().includes(query) ||
-      dir.element.toLowerCase().includes(query) ||
-      dir.favorableRooms.some((r) => r.toLowerCase().includes(query)) ||
-      dir.unfavorableRooms.some((r) => r.toLowerCase().includes(query))
-    );
-  });
 
   return (
     <section id="vastu-compass" className="py-20 bg-[#FAF8F5] border-b border-amber-200/60">
@@ -31,7 +20,7 @@ export const VastuCompassTool: React.FC = () => {
             Vastu Zone & Room Evaluator
           </h2>
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Select a direction on the compass or search for a specific room (e.g. Master Bedroom, Kitchen, Puja Room, MD Office Desk) to discover its optimal placement and Panchtattva element rules.
+            Select a direction on the compass or search for a specific room to discover its optimal placement and Panchtattva element rules.
           </p>
 
           {/* Quick Search Input */}
@@ -40,7 +29,7 @@ export const VastuCompassTool: React.FC = () => {
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
               <input
                 type="text"
-                placeholder="Search room (e.g. Kitchen, Toilet, Cash Box)..."
+                placeholder="Search room (e.g. Master Bedroom, Kitchen, Puja Room)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full bg-white border border-amber-300 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-600 shadow-sm"
@@ -91,58 +80,33 @@ export const VastuCompassTool: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-slate-950/80 px-4 py-2 rounded-xl border border-amber-500/30 text-xs">
-                <span className="text-slate-400 block text-[10px] uppercase tracking-wider font-semibold">Panchtattva Element</span>
-                <span className="font-bold text-amber-300 text-sm">{activeDirection.element}</span>
+              <div className="flex flex-wrap gap-3">
+                <div className="bg-slate-950/80 px-4 py-2 rounded-xl border border-amber-500/30 text-xs">
+                  <span className="text-slate-400 block text-[10px] uppercase tracking-wider font-semibold">Panchtattva Element</span>
+                  <span className="font-bold text-amber-300 text-sm">{activeDirection.element}</span>
+                </div>
+                <div className="bg-slate-950/80 px-4 py-2 rounded-xl border border-amber-500/30 text-xs">
+                  <span className="text-slate-400 block text-[10px] uppercase tracking-wider font-semibold">Recommended Palette</span>
+                  <span className="font-bold text-amber-300 text-sm">{activeDirection.colorTheme}</span>
+                </div>
               </div>
             </div>
 
             {/* Content Details */}
-            <div className="p-6 sm:p-8 grid md:grid-cols-3 gap-6">
+            <div className="p-6 sm:p-8">
               {/* Favorable Rooms */}
-              <div className="bg-emerald-50/60 p-5 rounded-xl border border-emerald-200 space-y-3">
-                <h4 className="font-bold text-emerald-900 text-sm flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-600" />
+              <div className="bg-emerald-50/60 p-6 rounded-xl border border-emerald-200 space-y-4">
+                <h4 className="font-bold text-emerald-900 text-base flex items-center gap-2">
+                  <Check className="w-5 h-5 text-emerald-600" />
                   Ideal & Favorable Placements
                 </h4>
-                <ul className="space-y-2">
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   {activeDirection.favorableRooms.map((room, idx) => (
-                    <li key={idx} className="text-xs text-emerald-950 font-medium flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0"></span>
+                    <div key={idx} className="bg-white/80 p-3 rounded-lg border border-emerald-100 text-xs text-emerald-950 font-medium flex items-center gap-2.5 shadow-sm">
+                      <span className="w-2 h-2 rounded-full bg-emerald-600 shrink-0"></span>
                       <span>{room}</span>
-                    </li>
+                    </div>
                   ))}
-                </ul>
-              </div>
-
-              {/* Unfavorable Rooms */}
-              <div className="bg-red-50/60 p-5 rounded-xl border border-red-200 space-y-3">
-                <h4 className="font-bold text-red-900 text-sm flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-red-600" />
-                  Unfavorable & Defective Placement
-                </h4>
-                <ul className="space-y-2">
-                  {activeDirection.unfavorableRooms.map((room, idx) => (
-                    <li key={idx} className="text-xs text-red-950 font-medium flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-600 shrink-0"></span>
-                      <span>{room}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Non-Demolition Remedies & Colors */}
-              <div className="bg-amber-50/80 p-5 rounded-xl border border-amber-300 space-y-3">
-                <h4 className="font-bold text-amber-950 text-sm flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-amber-700" />
-                  Non-Demolition Remedy Guidance
-                </h4>
-                <p className="text-xs text-amber-900 leading-relaxed">
-                  {activeDirection.remedies}
-                </p>
-                <div className="pt-2 border-t border-amber-200/80">
-                  <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider block">Recommended Palette:</span>
-                  <span className="text-xs font-bold text-slate-800">{activeDirection.colorTheme}</span>
                 </div>
               </div>
             </div>
@@ -152,3 +116,4 @@ export const VastuCompassTool: React.FC = () => {
     </section>
   );
 };
+

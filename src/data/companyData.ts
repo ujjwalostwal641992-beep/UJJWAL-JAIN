@@ -13,8 +13,8 @@ export const COMPANY_INFO = {
   aboutText: 'Ujjwal Jain is a leading Vastu consultant and his firm is based in India, offering professional Vedic Vastu guidance for homes, offices, commercial establishments, factories, and new construction projects. With over 10 years of experience, we combine traditional Vastu principles with modern architectural practices to create balanced and harmonious living and working environments.',
   stats: [
     { value: '10+', label: 'Years Experience' },
-    { value: '5,000+', label: 'Consultations Completed' },
-    { value: '20+', label: 'Cities Served in India' },
+    { value: '1500+', label: 'Consultations Completed' },
+    { value: '50+', label: 'Cities Served in India' },
     { value: '100%', label: 'Confidential & Non-Demolition' },
   ],
   contact: {

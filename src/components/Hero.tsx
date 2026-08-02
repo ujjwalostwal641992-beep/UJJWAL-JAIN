@@ -1,13 +1,12 @@
 import React from 'react';
 import { COMPANY_INFO } from '../data/companyData';
-import { Compass, Calendar, ShieldCheck, ArrowRight, Building2, Layers, CheckCircle2 } from 'lucide-react';
+import { Compass, Phone, ShieldCheck, ArrowRight, Building2, Layers, CheckCircle2 } from 'lucide-react';
 
 interface HeroProps {
-  onOpenBooking: () => void;
   onExploreCompass: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onExploreCompass }) => {
+export const Hero: React.FC<HeroProps> = ({ onExploreCompass }) => {
   return (
     <section className="relative bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden py-16 lg:py-24 border-b border-amber-900/30">
       {/* Background Sacred Geometry Accent */}
@@ -63,14 +62,14 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onExploreCompass }) =
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
-              <button
-                onClick={onOpenBooking}
+              <a
+                href="#contact"
                 className="w-full sm:w-auto bg-gradient-to-r from-amber-600 via-amber-500 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-slate-950 text-sm font-extrabold px-6 py-3.5 rounded-md shadow-lg shadow-amber-900/40 hover:shadow-amber-800/60 transition-all flex items-center justify-center gap-2 cursor-pointer group"
               >
-                <Calendar className="w-4 h-4 text-slate-950" />
-                <span>Book Free Consultation Call</span>
+                <Phone className="w-4 h-4 text-slate-950" />
+                <span>Get In Touch</span>
                 <ArrowRight className="w-4 h-4 text-slate-950 group-hover:translate-x-1 transition-transform" />
-              </button>
+              </a>
 
               <button
                 onClick={onExploreCompass}
@@ -81,6 +80,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenBooking, onExploreCompass }) =
               </button>
             </div>
           </div>
+
 
           {/* Graphic & Stats Card Column */}
           <div className="lg:col-span-5 relative">

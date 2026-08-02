@@ -2,11 +2,7 @@ import React from 'react';
 import { COMPANY_INFO } from '../data/companyData';
 import { Award, Compass, Building, Check, Globe, MapPin, Phone, Mail, FileText } from 'lucide-react';
 
-interface AboutSectionProps {
-  onOpenBooking: () => void;
-}
-
-export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBooking }) => {
+export const AboutSection: React.FC = () => {
   return (
     <section id="about" className="py-20 bg-[#FAF8F5] relative border-b border-amber-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,7 +54,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBooking }) => 
                   <span className="text-xs text-amber-800 font-medium">Industry Experience</span>
                 </div>
                 <div className="bg-amber-50/80 p-3 rounded-lg border border-amber-200">
-                  <span className="font-serif-heading font-extrabold text-xl text-amber-900 block">5,000+</span>
+                  <span className="font-serif-heading font-extrabold text-xl text-amber-900 block">1500+</span>
                   <span className="text-xs text-amber-800 font-medium">Consultations Completed</span>
                 </div>
               </div>
@@ -148,13 +144,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBooking }) => 
 
             {/* CTA Banner */}
             <div className="pt-2">
-              <button
-                onClick={onOpenBooking}
+              <a
+                href="#contact"
                 className="bg-slate-900 hover:bg-slate-800 text-amber-300 font-bold text-sm px-6 py-3 rounded-lg shadow-md transition-all inline-flex items-center gap-2 cursor-pointer"
               >
                 <span>Consult Er. Ujjwal Jain Directly</span>
                 <Check className="w-4 h-4 text-amber-400" />
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -162,3 +158,4 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBooking }) => 
     </section>
   );
 };
+

@@ -1,34 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { AboutSection } from './components/AboutSection';
 import { ServicesSection } from './components/ServicesSection';
 import { PadVinyasVisualizer } from './components/PadVinyasVisualizer';
 import { VastuCompassTool } from './components/VastuCompassTool';
-import { RemediesSection } from './components/RemediesSection';
+import { PanchbhootasSection } from './components/PanchbhootasSection';
 import { WhyChooseUs } from './components/WhyChooseUs';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { FAQSection } from './components/FAQSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
-import { BookingModal } from './components/BookingModal';
-import { SupabaseAdminModal } from './components/SupabaseAdminModal';
 
 export default function App() {
-  const [isBookingOpen, setIsBookingOpen] = useState(false);
-  const [isAdminOpen, setIsAdminOpen] = useState(false);
-  const [bookingServiceTitle, setBookingServiceTitle] = useState<string | undefined>(undefined);
-
-  const handleOpenBooking = (serviceTitle?: string) => {
-    setBookingServiceTitle(serviceTitle);
-    setIsBookingOpen(true);
-  };
-
-  const handleCloseBooking = () => {
-    setIsBookingOpen(false);
-    setBookingServiceTitle(undefined);
-  };
-
   const scrollToSection = (sectionId: string) => {
     const elem = document.getElementById(sectionId);
     if (elem) {
@@ -39,24 +23,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#FAF8F5] text-slate-800 font-['Plus_Jakarta_Sans',sans-serif] selection:bg-amber-100 selection:text-amber-900">
       {/* Top Navbar */}
-      <Navbar onOpenBooking={handleOpenBooking} />
+      <Navbar />
 
       {/* Main Content Sections */}
       <main>
-        <Hero
-          onOpenBooking={() => handleOpenBooking()}
-          onExploreCompass={() => scrollToSection('vastu-compass')}
-        />
+        <Hero onExploreCompass={() => scrollToSection('vastu-compass')} />
 
-        <AboutSection onOpenBooking={() => handleOpenBooking()} />
+        <AboutSection />
 
-        <ServicesSection onOpenBooking={handleOpenBooking} />
+        <ServicesSection />
 
         <PadVinyasVisualizer />
 
         <VastuCompassTool />
 
-        <RemediesSection onOpenBooking={() => handleOpenBooking()} />
+        <PanchbhootasSection />
 
         <WhyChooseUs />
 
@@ -68,26 +49,9 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer
-        onOpenBooking={() => handleOpenBooking()}
-        onOpenAdmin={() => setIsAdminOpen(true)}
-      />
-
-      {/* Booking Modal */}
-      <BookingModal
-        isOpen={isBookingOpen}
-        onClose={handleCloseBooking}
-        defaultServiceTitle={bookingServiceTitle}
-        onOpenAdmin={() => setIsAdminOpen(true)}
-      />
-
-      {/* Supabase Dashboard / Admin Modal */}
-      <SupabaseAdminModal
-        isOpen={isAdminOpen}
-        onClose={() => setIsAdminOpen(false)}
-        onOpenBooking={() => handleOpenBooking()}
-      />
+      <Footer />
     </div>
   );
 }
+
 

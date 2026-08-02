@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Sparkles, Compass, Info, CheckCircle2 } from 'lucide-react';
+import { Grid, Compass, Info, CheckCircle2 } from 'lucide-react';
 
 interface PadaCell {
   id: number;
@@ -224,23 +224,14 @@ export const PadVinyasVisualizer: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="space-y-3 text-xs">
-                  <div className="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                    <span className="font-bold text-amber-300 block mb-1">Ideal Construction Placement:</span>
-                    <p className="text-slate-200">{selectedCell.idealFor}</p>
+                <div className="bg-slate-950 p-4 rounded-xl border border-amber-500/30 text-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-400 font-medium">Zone Category</span>
+                    <span className="font-bold text-amber-300">{selectedCell.zone} Zone</span>
                   </div>
-
-                  <div className="bg-red-950/30 p-3 rounded-lg border border-red-900/40">
-                    <span className="font-bold text-red-300 block mb-1">Strictly Avoid:</span>
-                    <p className="text-slate-300">{selectedCell.avoid}</p>
-                  </div>
-
-                  <div className="bg-amber-950/40 p-3 rounded-lg border border-amber-500/30">
-                    <span className="font-bold text-amber-300 block mb-1 flex items-center gap-1">
-                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                      Er. Ujjwal Jain's Engineering Insight:
-                    </span>
-                    <p className="text-amber-100">{selectedCell.engineeringTip}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-400 font-medium">Grid Position</span>
+                    <span className="font-bold text-slate-200">Row {selectedCell.row + 1}, Column {selectedCell.col + 1}</span>
                   </div>
                 </div>
               </div>

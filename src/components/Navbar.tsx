@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { COMPANY_INFO } from '../data/companyData';
-import { Phone, Mail, MapPin, Menu, X, Compass, Calendar, MessageSquare, Clock } from 'lucide-react';
+import { Phone, MapPin, Menu, X, Compass, MessageSquare, Clock } from 'lucide-react';
+import { UjjwalLogo } from './UjjwalLogo';
 
-interface NavbarProps {
-  onOpenBooking: (serviceTitle?: string) => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
+export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -23,7 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
     { name: 'Services', href: '#services' },
     { name: 'Pad Vinyas Grid', href: '#pad-vinyas' },
     { name: 'Vastu Compass Tool', href: '#vastu-compass' },
-    { name: 'Non-Demolition', href: '#remedies' },
+    { name: 'Panchbhootas', href: '#panchbhootas' },
     { name: 'Why Choose Us', href: '#why-us' },
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'Contact', href: '#contact' },
@@ -81,10 +78,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo & Brand Name */}
           <a href="#" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-amber-700 via-amber-600 to-amber-900 p-0.5 shadow-md group-hover:scale-105 transition-transform">
-              <div className="w-full h-full bg-slate-900 rounded-[7px] flex items-center justify-center">
-                <Compass className="w-6 h-6 text-amber-400 animate-pulse" />
-              </div>
+            <div className="p-1 rounded-xl bg-white border border-amber-300 shadow-sm group-hover:scale-105 transition-transform flex items-center justify-center">
+              <UjjwalLogo className="w-9 h-10" />
             </div>
 
             <div>
@@ -110,15 +105,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
             ))}
           </div>
 
-          {/* Consultation CTA Button */}
-          <div className="hidden sm:flex items-center gap-3">
-            <button
-              onClick={() => onOpenBooking()}
-              className="bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-amber-50 text-xs font-bold px-4 py-2.5 rounded-md shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer"
+          {/* Top Right Contact CTA & Compass Badge */}
+          <div className="flex items-center gap-3">
+            <a
+              href="#contact"
+              className="hidden sm:flex bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-amber-50 text-xs font-bold px-4 py-2.5 rounded-md shadow-md hover:shadow-lg transition-all items-center gap-2 cursor-pointer"
             >
-              <Calendar className="w-4 h-4 text-amber-300" />
-              <span>Book Consultation</span>
-            </button>
+              <Phone className="w-4 h-4 text-amber-300" />
+              <span>Contact Office</span>
+            </a>
+
+            {/* Top Right Animated Compass Badge */}
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-700 via-amber-600 to-amber-900 p-0.5 shadow-md hover:scale-105 transition-transform" title="Vastu Compass Directional Guide">
+              <div className="w-full h-full bg-slate-900 rounded-[7px] flex items-center justify-center">
+                <Compass className="w-5 h-5 text-amber-400 animate-pulse" />
+              </div>
+            </div>
           </div>
 
           {/* Mobile Hamburger Toggle */}
@@ -148,16 +150,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
             </div>
 
             <div className="pt-2 flex flex-col gap-2">
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenBooking();
-                }}
-                className="w-full bg-gradient-to-r from-amber-700 to-amber-800 text-white text-sm font-bold py-3 rounded-md shadow flex items-center justify-center gap-2"
+              <a
+                href="#contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full bg-gradient-to-r from-amber-700 to-amber-800 text-white text-sm font-bold py-3 rounded-md shadow flex items-center justify-center gap-2 text-center"
               >
-                <Calendar className="w-4 h-4" />
-                <span>Book Consultation</span>
-              </button>
+                <Phone className="w-4 h-4" />
+                <span>Contact Office</span>
+              </a>
             </div>
           </div>
         )}
@@ -165,4 +165,5 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBooking }) => {
     </header>
   );
 };
+
 

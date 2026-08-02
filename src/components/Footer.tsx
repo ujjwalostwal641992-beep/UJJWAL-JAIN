@@ -1,13 +1,8 @@
 import React from 'react';
 import { COMPANY_INFO, SERVICES_LIST } from '../data/companyData';
-import { Compass, Phone, Mail, MapPin, MessageSquare, ArrowUp, ShieldCheck, Lock } from 'lucide-react';
+import { Compass, Phone, Mail, MapPin, MessageSquare, ArrowUp } from 'lucide-react';
 
-interface FooterProps {
-  onOpenBooking: () => void;
-  onOpenAdmin?: () => void;
-}
-
-export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenAdmin }) => {
+export const Footer: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -80,25 +75,14 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenAdmin }) =>
               <li><a href="#services" className="hover:text-amber-400 transition-colors">Vastu Services</a></li>
               <li><a href="#pad-vinyas" className="hover:text-amber-400 transition-colors">Pad Vinyas Grid</a></li>
               <li><a href="#vastu-compass" className="hover:text-amber-400 transition-colors">Vastu Compass Tool</a></li>
-              <li><a href="#remedies" className="hover:text-amber-400 transition-colors">Non-Demolition Remedies</a></li>
+              <li><a href="#panchbhootas" className="hover:text-amber-400 transition-colors">Panchbhootas & Energies</a></li>
               <li><a href="#why-us" className="hover:text-amber-400 transition-colors">Why Choose Us</a></li>
               <li><a href="#testimonials" className="hover:text-amber-400 transition-colors">Testimonials</a></li>
               <li><a href="#contact" className="hover:text-amber-400 transition-colors">Contact Office</a></li>
-              {onOpenAdmin && (
-                <li className="pt-2 border-t border-slate-800">
-                  <button
-                    onClick={onOpenAdmin}
-                    className="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1 font-semibold cursor-pointer text-xs"
-                  >
-                    <Lock className="w-3 h-3 text-amber-400" />
-                    <span>Admin Portal Login / Setup</span>
-                  </button>
-                </li>
-              )}
             </ul>
           </div>
 
-          {/* Our 10 Services List */}
+          {/* Our Services List */}
           <div className="lg:col-span-3 space-y-3">
             <h4 className="font-serif-heading font-bold text-slate-100 text-sm tracking-wider uppercase border-b border-slate-800 pb-2">
               Our Vastu Services
@@ -131,12 +115,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenAdmin }) =>
             </div>
 
             <div className="pt-4">
-              <button
-                onClick={onOpenBooking}
-                className="w-full bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white text-xs font-bold py-2.5 rounded-lg shadow transition-all cursor-pointer"
+              <a
+                href="#contact"
+                className="block text-center bg-gradient-to-r from-amber-700 to-amber-800 hover:from-amber-800 hover:to-amber-900 text-white text-xs font-bold py-2.5 rounded-lg shadow transition-all cursor-pointer"
               >
-                Book Free Consultation Call
-              </button>
+                Contact Office For Inquiries
+              </a>
             </div>
           </div>
         </div>
@@ -145,18 +129,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenAdmin }) =>
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex items-center gap-3">
             <span>© {new Date().getFullYear()} {COMPANY_INFO.fullBrandName}. All Rights Reserved.</span>
-            {onOpenAdmin && (
-              <>
-                <span className="text-slate-800">•</span>
-                <button
-                  onClick={onOpenAdmin}
-                  className="text-slate-400 hover:text-amber-400 underline transition-colors cursor-pointer flex items-center gap-1 text-[11px]"
-                >
-                  <Lock className="w-3 h-3 text-amber-500" />
-                  <span>Admin Panel</span>
-                </button>
-              </>
-            )}
           </div>
 
           <div className="flex items-center gap-4">
@@ -174,3 +146,4 @@ export const Footer: React.FC<FooterProps> = ({ onOpenBooking, onOpenAdmin }) =>
     </footer>
   );
 };
+
